@@ -1,13 +1,13 @@
-							CNSpector
+# CNSpector
                                                            
 CNSpector is a web-based browser to visualize Copy Number Variation (CNV) calls. The browser is an R program for shiny-server that reads an input file containing a table whose rows point to the files to display for a given sample or group of samples (multi-sample mode). Currently it can support output from cnvkit, copywriter and canvas tools. The outputs from these tools are converted in a format accepted by CNSpector.
 
-Installation
+### Installation
 
 Git clone the repository as below or download as required. The folder structure needs to remain the same able to run the scripts or load the references correctly. 
 git clone https://github.com/PapenfussLab/CNspector.git 
 
-shiny-server scripts
+### shiny-server scripts
 
 The following R files are provided for CNSpector browser. It was tested with R 3.3.1, 3.4.0 and 3.5.1 versions and can be launched through Rstudio.
 
@@ -15,7 +15,7 @@ The following R files are provided for CNSpector browser. It was tested with R 3
 		Server.R
 		ui.R
 
-Reference files
+### Reference files
 
 The following reference files are provided to support tools output conversion and for the browser in terms of annotations and bin sizes for computations – 
  
@@ -40,7 +40,7 @@ The following reference files are provided to support tools output conversion an
 
   <hg_19_targeted.bed/targeted_transcripts.bed/panel_transcripts.bed> - Bed files to be generated as per the panel design.
 
-R package dependencies
+### R package dependencies
 
   Browser
   
@@ -62,7 +62,7 @@ R package dependencies
 	  library(VariantAnnotation)
 
 
-Convert different CNV tools output – 
+### Convert scripts
 
 Refer to the basic instructions provided in the documentation/CNVTools_README to help run other cnv tools (not limited to this but can be run directly by following the actual tool documentation). Conversion script steps are list here again which converts the different tool outputs to browser accepted input file.
 
@@ -94,7 +94,7 @@ Refer to the basic instructions provided in the documentation/CNVTools_README to
 		Output: combination/index.tsv
 
 
-Rstudio run Instructions 
+### Rstudio run Instructions 
 
 Open the server.R through Rstudio and run the application to launch the shiny application as follows – 
 
