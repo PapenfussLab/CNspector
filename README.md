@@ -4,7 +4,8 @@ CNSpector is a web-based browser to visualize Copy Number Variation (CNV) calls.
 
 ### Installation
 
-Git clone the repository as below or download as required. The folder structure needs to remain the same able to run the scripts or load the references correctly. 
+Git clone the repository or download as required. The folder structure needs to remain the same to be able to run the scripts or load the references correctly. 
+
 git clone https://github.com/PapenfussLab/CNspector.git 
 
 ### shiny-server scripts
@@ -17,7 +18,7 @@ The following R files are provided for CNSpector browser. It was tested with R 3
 
 ### Reference files
 
-The following reference files are provided to support tools output conversion and for the browser in terms of annotations and bin sizes for computations – 
+The following reference files are provided to support cnv tools output conversion and for the browser in terms of annotations and bin sizes for computations – 
  
  1. annotations/browser
   
@@ -64,30 +65,30 @@ The following reference files are provided to support tools output conversion an
 
 ### Convert scripts
 
-Refer to the basic instructions provided in the documentation/CNVTools_README to help run other cnv tools (not limited to this but can be run directly by following the actual tool documentation). Conversion script steps are list here again which converts the different tool outputs to browser accepted input file.
+Refer to the basic instructions provided in the documentation/CNVTools_README to help run other cnv tools (not limited to this but can be run directly by following the actual tool documentation). Conversion scripts are to convert the different tool outputs to browser acceptable input files.
 
 1.	Cnvkit
 
-		a.	The cnvkit_output folder needs to be placed inside the cnvkit folder. 
+		a.	"cnvkit_output" folder needs to be placed inside the cnvkit folder. 
 		b.	Run the following commands to generate the “index.tsv” file for browser
 			cd cnvkit
 			Rscript scripts/import.R 
 
 2.	Canvas
 
-		a.	The “canvas_output” folder needs to be location inside canvas folder.
+		a.	“canvas_output” folder needs to be location inside canvas folder.
 		b.	Run the following commands to generate the CNSpector/index.tsv file for browser
 			cd canvas
 			Rscript scripts/import.R
 
 3.	CopyWriter
 
-		a.	copywriter_output folder needs to be places inside the copywriter folder. 
+		a.	"copywriter_output" folder needs to be places inside the copywriter folder. 
 		b.	Run the following commands to generate CNSpector/index.tsv file for browser.
 			cd copywriter
 			Rscript scripts/import.R
 
-4.	Multiple tool combination 
+4.	Multiple tools combination 
 	If successful running all the 3 tools, then best resolution from each tool is put together to view in the browser as follows – 
 
 		scripts/make_combination_index.sh
