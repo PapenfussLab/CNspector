@@ -1,0 +1,850 @@
+Instructions for the supported cnvtools
+git clone the repository first as mentioned in the browser installation instructions. 
+I.	Canvas (https://github.com/Illumina/canvas) 
+
+a.	Tool versions:
+Tools/Dependencies	Versions
+Canvas	1.11.0*
+Mono	Mono JIT compiler version 4.0.2
+*Although latest versions are available Somatic-Enrichment mode is well supported in the tested version.
+            b. Required supporting files:
+Downloaded the required (eg: GRCh37) genome build files from -  http://canvas-cnv-public.s3.amazonaws.com/ to a /reference/ folder. 
+•	GenomeSize.xml
+•	genome.fa
+•	genome.fa.fai
+•	filter13.bed
+•	kmer.fa
+•	kmer.fa.fai
+•	manifest.txt 
+
+--- manifest.txt (panel design file)
+Manifest Type: Regions
+#Target Region Count: 214126
+#Date: 11/25/2015
+[Header]
+ReferenceGenome	Homo_sapiens\UCSC\hg19\Sequence\WholeGenomeFASTA
+[Regions]
+Name	Chromosome	Start	End	Upstream Probe Length	Downstream Probe Length
+CEX-chr1-12099-12258	chr1	12099	12258	0	0
+CEX-chr1-12554-12721	chr1	12554	12721	0	0
+CEX-chr1-13332-13701	chr1	13332	13701	0	0
+CEX-chr1-30335-30503	chr1	30335	30503	0	0
+CEX-chr1-35046-35544	chr1	35046	35544	0	0
+CEX-chr1-35619-35778	chr1	35619	35778	0	0
+CEX-chr1-69078-70017	chr1	69078	70017	0	0
+
+b.	Run canvas tool 
+1.	The tool options can be run using the tool documentation or using the following bash script for basic steps. It will allow running canvas for somatic/germline samples.
+
+Location: canvas/scripts/canvas.sh
+Usage: ./canvas.sh -h
+canvas.sh [-h] [-a] [-c] [-r] [-m] [-o] [-s] [-v] [-t] -- This script is to run canvas tool for somatic as well as germline modes. Tools set up to be done prior to using this script.
+        where:
+                -h show the help
+                -a mono path                            [REQUIRED. Path to the folder containing mono executable]
+                -c canvas path                          [REQUIRED. Path to the canvas tool folder]
+                -r reference folder path             [REQUIRED. Need to contains genome.fa, kmer.fa, filter13.bed 
+                                                                  and corresponding .fai files]
+                -m manifest file                         [REQUIRED]
+                -o output path                           [DEFAULT: CWD/output/samplename]
+                -s sample name                        [REQUIRED. Needed for canvas work flow]
+                -v sample vcf file                      [REQUIRED]
+                -t mode                                     [DEFAULT: Somatic. Somatic/Germline]
+                -b sample bam                          [REQUIRED]
+                -n normals list                           [REQUIRED. A list containing normal samples bam full paths]
+
+Example - ./canvas.sh -a /home/bin –c /home/bin/canvas/1.11.0 -r canvas_tool/reference –m canvas_tool/manifest.txt -s test_sample -v canvas_tool/test_sample.vcf -b canvas_tool/test_sample.bam -n canvas_tool/Normals.txt
+
+2.	Canvas Output
+output/t1
++-- CanvasError.txt
++-- CanvasLog.txt
++-- Checkpoints
+¦   +-- 01-CanvasSNV.json
+¦   +-- 02-CanvasBin.json
+¦   +-- 03-CanvasClean.json
+¦   +-- 04-CanvasPartition.json
+¦   +-- 05-Intersectbinswithmanifest.json
+¦   +-- 06-Variantcalling.json
++-- CNV.CoverageAndVariantFrequency.txt
++-- CNV.vcf.gz
++-- Logging
+¦   +-- t1_0_10.dat.stdout.txt
+¦   +-- t1_0_11.dat.stdout.txt
+¦   +-- t1_0_12.dat.stdout.txt
+¦   +-- t1_0_13.dat.stdout.txt
+¦   +-- t1_0_14.dat.stdout.txt
+¦   +-- t1_0_15.dat.stdout.txt
+¦   +-- t1_0_16.dat.stdout.txt
+¦   +-- t1_0_17.dat.stdout.txt
+¦   +-- t1_0_18.dat.stdout.txt
+¦   +-- t1_0_19.dat.stdout.txt
+¦   +-- t1_0_1.dat.stdout.txt
+¦   +-- t1_0_20.dat.stdout.txt
+¦   +-- t1_0_21.dat.stdout.txt
+¦   +-- t1_0_22.dat.stdout.txt
+¦   +-- t1_0_2.dat.stdout.txt
+¦   +-- t1_0_3.dat.stdout.txt
+¦   +-- t1_0_4.dat.stdout.txt
+¦   +-- t1_0_5.dat.stdout.txt
+¦   +-- t1_0_6.dat.stdout.txt
+¦   +-- t1_0_7.dat.stdout.txt
+¦   +-- t1_0_8.dat.stdout.txt
+¦   +-- t1_0_9.dat.stdout.txt
+¦   +-- t1_0.binned.stdout.txt
+¦   +-- t1_0_X.dat.stdout.txt
+¦   +-- t1_0_Y.dat.stdout.txt
+¦   +-- t1_1_10.dat.stdout.txt
+¦   +-- t1_1_11.dat.stdout.txt
+¦   +-- t1_1_12.dat.stdout.txt
+¦   +-- t1_1_13.dat.stdout.txt
+¦   +-- t1_1_14.dat.stdout.txt
+¦   +-- t1_1_15.dat.stdout.txt
+¦   +-- t1_1_16.dat.stdout.txt
+¦   +-- t1_1_17.dat.stdout.txt
+¦   +-- t1_1_18.dat.stdout.txt
+¦   +-- t1_1_19.dat.stdout.txt
+¦   +-- t1_1_1.dat.stdout.txt
+¦   +-- t1_1_20.dat.stdout.txt
+¦   +-- t1_1_21.dat.stdout.txt
+¦   +-- t1_1_22.dat.stdout.txt
+¦   +-- t1_1_2.dat.stdout.txt
+¦   +-- t1_1_3.dat.stdout.txt
+¦   +-- t1_1_4.dat.stdout.txt
+¦   +-- t1_1_5.dat.stdout.txt
+¦   +-- t1_1_6.dat.stdout.txt
+¦   +-- t1_1_7.dat.stdout.txt
+¦   +-- t1_1_8.dat.stdout.txt
+¦   +-- t1_1_9.dat.stdout.txt
+¦   +-- t1_1.binned.stdout.txt
+¦   +-- t1_1_X.dat.stdout.txt
+¦   +-- t1_1_Y.dat.stdout.txt
+¦   +-- t1_2_10.dat.stdout.txt
+¦   +-- t1_2_11.dat.stdout.txt
+¦   +-- t1_2_12.dat.stdout.txt
+¦   +-- t1_2_13.dat.stdout.txt
+¦   +-- t1_2_14.dat.stdout.txt
+¦   +-- t1_2_15.dat.stdout.txt
+¦   +-- t1_2_16.dat.stdout.txt
+¦   +-- t1_2_17.dat.stdout.txt
+¦   +-- t1_2_18.dat.stdout.txt
+¦   +-- t1_2_19.dat.stdout.txt
+¦   +-- t1_2_1.dat.stdout.txt
+¦   +-- t1_2_20.dat.stdout.txt
+¦   +-- t1_2_21.dat.stdout.txt
+¦   +-- t1_2_22.dat.stdout.txt
+¦   +-- t1_2_2.dat.stdout.txt
+¦   +-- t1_2_3.dat.stdout.txt
+¦   +-- t1_2_4.dat.stdout.txt
+¦   +-- t1_2_5.dat.stdout.txt
+¦   +-- t1_2_6.dat.stdout.txt
+¦   +-- t1_2_7.dat.stdout.txt
+¦   +-- t1_2_8.dat.stdout.txt
+¦   +-- t1_2_9.dat.stdout.txt
+¦   +-- t1_2.binned.stdout.txt
+¦   +-- t1_2_X.dat.stdout.txt
+¦   +-- t1_2_Y.dat.stdout.txt
+¦   +-- t1_3_10.dat.stdout.txt
+¦   +-- t1_3_11.dat.stdout.txt
+¦   +-- t1_3_12.dat.stdout.txt
+¦   +-- t1_3_13.dat.stdout.txt
+¦   +-- t1_3_14.dat.stdout.txt
+¦   +-- t1_3_15.dat.stdout.txt
+¦   +-- t1_3_16.dat.stdout.txt
+¦   +-- t1_3_17.dat.stdout.txt
+¦   +-- t1_3_18.dat.stdout.txt
+¦   +-- t1_3_19.dat.stdout.txt
+¦   +-- t1_3_1.dat.stdout.txt
+¦   +-- t1_3_20.dat.stdout.txt
+¦   +-- t1_3_21.dat.stdout.txt
+¦   +-- t1_3_22.dat.stdout.txt
+¦   +-- t1_3_2.dat.stdout.txt
+¦   +-- t1_3_3.dat.stdout.txt
+¦   +-- t1_3_4.dat.stdout.txt
+¦   +-- t1_3_5.dat.stdout.txt
+¦   +-- t1_3_6.dat.stdout.txt
+¦   +-- t1_3_7.dat.stdout.txt
+¦   +-- t1_3_8.dat.stdout.txt
+¦   +-- t1_3_9.dat.stdout.txt
+¦   +-- t1_3.binned.stdout.txt
+¦   +-- t1_3_X.dat.stdout.txt
+¦   +-- t1_3_Y.dat.stdout.txt
+¦   +-- t1_4_10.dat.stdout.txt
+¦   +-- t1_4_11.dat.stdout.txt
+¦   +-- t1_4_12.dat.stdout.txt
+¦   +-- t1_4_13.dat.stdout.txt
+¦   +-- t1_4_14.dat.stdout.txt
+¦   +-- t1_4_15.dat.stdout.txt
+¦   +-- t1_4_16.dat.stdout.txt
+¦   +-- t1_4_17.dat.stdout.txt
+¦   +-- t1_4_18.dat.stdout.txt
+¦   +-- t1_4_19.dat.stdout.txt
+¦   +-- t1_4_1.dat.stdout.txt
+¦   +-- t1_4_20.dat.stdout.txt
+¦   +-- t1_4_21.dat.stdout.txt
+¦   +-- t1_4_22.dat.stdout.txt
+¦   +-- t1_4_2.dat.stdout.txt
+¦   +-- t1_4_3.dat.stdout.txt
+¦   +-- t1_4_4.dat.stdout.txt
+¦   +-- t1_4_5.dat.stdout.txt
+¦   +-- t1_4_6.dat.stdout.txt
+¦   +-- t1_4_7.dat.stdout.txt
+¦   +-- t1_4_8.dat.stdout.txt
+¦   +-- t1_4_9.dat.stdout.txt
+¦   +-- t1_4.binned.stdout.txt
+¦   +-- t1_4_X.dat.stdout.txt
+¦   +-- t1_4_Y.dat.stdout.txt
+¦   +-- t1_5_10.dat.stdout.txt
+¦   +-- t1_5_11.dat.stdout.txt
+¦   +-- t1_5_12.dat.stdout.txt
+¦   +-- t1_5_13.dat.stdout.txt
+¦   +-- t1_5_14.dat.stdout.txt
+¦   +-- t1_5_15.dat.stdout.txt
+¦   +-- t1_5_16.dat.stdout.txt
+¦   +-- t1_5_17.dat.stdout.txt
+¦   +-- t1_5_18.dat.stdout.txt
+¦   +-- t1_5_19.dat.stdout.txt
+¦   +-- t1_5_1.dat.stdout.txt
+¦   +-- t1_5_20.dat.stdout.txt
+¦   +-- t1_5_21.dat.stdout.txt
+¦   +-- t1_5_22.dat.stdout.txt
+¦   +-- t1_5_2.dat.stdout.txt
+¦   +-- t1_5_3.dat.stdout.txt
+¦   +-- t1_5_4.dat.stdout.txt
+¦   +-- t1_5_5.dat.stdout.txt
+¦   +-- t1_5_6.dat.stdout.txt
+¦   +-- t1_5_7.dat.stdout.txt
+¦   +-- t1_5_8.dat.stdout.txt
+¦   +-- t1_5_9.dat.stdout.txt
+¦   +-- t1_5.binned.stdout.txt
+¦   +-- t1_5_X.dat.stdout.txt
+¦   +-- t1_5_Y.dat.stdout.txt
+¦   +-- t1_6_10.dat.stdout.txt
+¦   +-- t1_6_11.dat.stdout.txt
+¦   +-- t1_6_12.dat.stdout.txt
+¦   +-- t1_6_13.dat.stdout.txt
+¦   +-- t1_6_14.dat.stdout.txt
+¦   +-- t1_6_15.dat.stdout.txt
+¦   +-- t1_6_16.dat.stdout.txt
+¦   +-- t1_6_17.dat.stdout.txt
+¦   +-- t1_6_18.dat.stdout.txt
+¦   +-- t1_6_19.dat.stdout.txt
+¦   +-- t1_6_1.dat.stdout.txt
+¦   +-- t1_6_20.dat.stdout.txt
+¦   +-- t1_6_21.dat.stdout.txt
+¦   +-- t1_6_22.dat.stdout.txt
+¦   +-- t1_6_2.dat.stdout.txt
+¦   +-- t1_6_3.dat.stdout.txt
+¦   +-- t1_6_4.dat.stdout.txt
+¦   +-- t1_6_5.dat.stdout.txt
+¦   +-- t1_6_6.dat.stdout.txt
+¦   +-- t1_6_7.dat.stdout.txt
+¦   +-- t1_6_8.dat.stdout.txt
+¦   +-- t1_6_9.dat.stdout.txt
+¦   +-- t1_6.binned.stdout.txt
+¦   +-- t1_6_X.dat.stdout.txt
+¦   +-- t1_6_Y.dat.stdout.txt
+¦   +-- t1.cleaned.stdout.txt
+¦   +-- t1.partitioned.stdout.txt
+¦   +-- t1.ratio.binned.stdout.txt
+¦   +-- t1.stdout.txt
+¦   +-- CanvasSNV-t1-10.stdout.txt
+¦   +-- CanvasSNV-t1-11.stdout.txt
+¦   +-- CanvasSNV-t1-12.stdout.txt
+¦   +-- CanvasSNV-t1-13.stdout.txt
+¦   +-- CanvasSNV-t1-14.stdout.txt
+¦   +-- CanvasSNV-t1-15.stdout.txt
+¦   +-- CanvasSNV-t1-16.stdout.txt
+¦   +-- CanvasSNV-t1-17.stdout.txt
+¦   +-- CanvasSNV-t1-18.stdout.txt
+¦   +-- CanvasSNV-t1-19.stdout.txt
+¦   +-- CanvasSNV-t1-1.stdout.txt
+¦   +-- CanvasSNV-t1-20.stdout.txt
+¦   +-- CanvasSNV-t1-21.stdout.txt
+¦   +-- CanvasSNV-t1-22.stdout.txt
+¦   +-- CanvasSNV-t1-2.stdout.txt
+¦   +-- CanvasSNV-t1-3.stdout.txt
+¦   +-- CanvasSNV-t1-4.stdout.txt
+¦   +-- CanvasSNV-t1-5.stdout.txt
+¦   +-- CanvasSNV-t1-6.stdout.txt
+¦   +-- CanvasSNV-t1-7.stdout.txt
+¦   +-- CanvasSNV-t1-8.stdout.txt
+¦   +-- CanvasSNV-t1-9.stdout.txt
+¦   +-- CanvasSNV-t1-X.stdout.txt
+¦   +-- CanvasSNV-t1-Y.stdout.txt
+¦   +-- commands.tsv
+¦   +-- SomaticCNV-t1.stdout.txt
++-- Temp01-CanvasSNV
++-- Temp06-Variantcalling
++-- TempCNV_t1
+    +-- 10-t1.SNV.txt.gz
+    +-- 11-t1.SNV.txt.gz
+    +-- 1-t1.SNV.txt.gz
+    +-- 12-t1.SNV.txt.gz
+    +-- 13-t1.SNV.txt.gz
+    +-- 14-t1.SNV.txt.gz
+    +-- 15-t1.SNV.txt.gz
+    +-- t1_0_10.dat
+    +-- t1_0_11.dat
+    +-- t1_0_12.dat
+    +-- t1_0_13.dat
+    +-- t1_0_14.dat
+    +-- t1_0_15.dat
+    +-- t1_0_16.dat
+    +-- t1_0_17.dat
+    +-- t1_0_18.dat
+    +-- t1_0_19.dat
+    +-- t1_0_1.dat
+    +-- t1_0_20.dat
+    +-- t1_0_21.dat
+    +-- t1_0_22.dat
+    +-- t1_0_2.dat
+    +-- t1_0_3.dat
+    +-- t1_0_4.dat
+    +-- t1_0_5.dat
+    +-- t1_0_6.dat
+    +-- t1_0_7.dat
+    +-- t1_0_8.dat
+    +-- t1_0_9.dat
+    +-- t1_0.binned
+    +-- t1_0_X.dat
+    +-- t1_0_Y.dat
+    +-- t1_1_10.dat
+    +-- t1_1_11.dat
+    +-- t1_1_12.dat
+    +-- t1_1_13.dat
+    +-- t1_1_14.dat
+    +-- t1_1_15.dat
+    +-- t1_1_16.dat
+    +-- t1_1_17.dat
+    +-- t1_1_18.dat
+    +-- t1_1_19.dat
+    +-- t1_1_1.dat
+    +-- t1_1_20.dat
+    +-- t1_1_21.dat
+    +-- t1_1_22.dat
+    +-- t1_1_2.dat
+    +-- t1_1_3.dat
+    +-- t1_1_4.dat
+    +-- t1_1_5.dat
+    +-- t1_1_6.dat
+    +-- t1_1_7.dat
+    +-- t1_1_8.dat
+    +-- t1_1_9.dat
+    +-- t1_1.binned
+    +-- t1_1_X.dat
+    +-- t1_1_Y.dat
+    +-- t1_2_10.dat
+    +-- t1_2_11.dat
+    +-- t1_2_12.dat
+    +-- t1_2_13.dat
+    +-- t1_2_14.dat
+    +-- t1_2_15.dat
+    +-- t1_2_16.dat
+    +-- t1_2_17.dat
+    +-- t1_2_18.dat
+    +-- t1_2_19.dat
+    +-- t1_2_1.dat
+    +-- t1_2_20.dat
+    +-- t1_2_21.dat
+    +-- t1_2_22.dat
+    +-- t1_2_2.dat
+    +-- t1_2_3.dat
+    +-- t1_2_4.dat
+    +-- t1_2_5.dat
+    +-- t1_2_6.dat
+    +-- t1_2_7.dat
+    +-- t1_2_8.dat
+    +-- t1_2_9.dat
+    +-- t1_2.binned
+    +-- t1_2_X.dat
+    +-- t1_2_Y.dat
+    +-- t1_3_10.dat
+    +-- t1_3_11.dat
+    +-- t1_3_12.dat
+    +-- t1_3_13.dat
+    +-- t1_3_14.dat
+    +-- t1_3_15.dat
+    +-- t1_3_16.dat
+    +-- t1_3_17.dat
+    +-- t1_3_18.dat
+    +-- t1_3_19.dat
+    +-- t1_3_1.dat
+    +-- t1_3_20.dat
+    +-- t1_3_21.dat
+    +-- t1_3_22.dat
+    +-- t1_3_2.dat
+    +-- t1_3_3.dat
+    +-- t1_3_4.dat
+    +-- t1_3_5.dat
+    +-- t1_3_6.dat
+    +-- t1_3_7.dat
+    +-- t1_3_8.dat
+    +-- t1_3_9.dat
+    +-- t1_3.binned
+    +-- t1_3_X.dat
+    +-- t1_3_Y.dat
+    +-- t1_4_10.dat
+    +-- t1_4_11.dat
+    +-- t1_4_12.dat
+    +-- t1_4_13.dat
+    +-- t1_4_14.dat
+    +-- t1_4_15.dat
+    +-- t1_4_16.dat
+    +-- t1_4_17.dat
+    +-- t1_4_18.dat
+    +-- t1_4_19.dat
+    +-- t1_4_1.dat
+    +-- t1_4_20.dat
+    +-- t1_4_21.dat
+    +-- t1_4_22.dat
+    +-- t1_4_2.dat
+    +-- t1_4_3.dat
+    +-- t1_4_4.dat
+    +-- t1_4_5.dat
+    +-- t1_4_6.dat
+    +-- t1_4_7.dat
+    +-- t1_4_8.dat
+    +-- t1_4_9.dat
+    +-- t1_4.binned
+    +-- t1_4_X.dat
+    +-- t1_4_Y.dat
+    +-- t1_5_10.dat
+    +-- t1_5_11.dat
+    +-- t1_5_12.dat
+    +-- t1_5_13.dat
+    +-- t1_5_14.dat
+    +-- t1_5_15.dat
+    +-- t1_5_16.dat
+    +-- t1_5_17.dat
+    +-- t1_5_18.dat
+    +-- t1_5_19.dat
+    +-- t1_5_1.dat
+    +-- t1_5_20.dat
+    +-- t1_5_21.dat
+    +-- t1_5_22.dat
+    +-- t1_5_2.dat
+    +-- t1_5_3.dat
+    +-- t1_5_4.dat
+    +-- t1_5_5.dat
+    +-- t1_5_6.dat
+    +-- t1_5_7.dat
+    +-- t1_5_8.dat
+    +-- t1_5_9.dat
+    +-- t1_5.binned
+    +-- t1_5_X.dat
+    +-- t1_5_Y.dat
+    +-- t1_6_10.dat
+    +-- t1_6_11.dat
+    +-- t1_6_12.dat
+    +-- t1_6_13.dat
+    +-- t1_6_14.dat
+    +-- t1_6_15.dat
+    +-- t1_6_16.dat
+    +-- t1_6_17.dat
+    +-- t1_6_18.dat
+    +-- t1_6_19.dat
+    +-- t1_6_1.dat
+    +-- t1_6_20.dat
+    +-- t1_6_21.dat
+    +-- t1_6_22.dat
+    +-- t1_6_2.dat
+    +-- t1_6_3.dat
+    +-- t1_6_4.dat
+    +-- t1_6_5.dat
+    +-- t1_6_6.dat
+    +-- t1_6_7.dat
+    +-- t1_6_8.dat
+    +-- t1_6_9.dat
+    +-- t1_6.binned
+    +-- t1_6_X.dat
+    +-- t1_6_Y.dat
+    +-- t1.binsize
+    +-- t1.cleaned
+    +-- t1.normal.binned
+    +-- t1.partitioned
+    +-- t1.partitioned.raw
+    +-- t1.ratio.binned
+    +-- 16-t1.SNV.txt.gz
+    +-- 17-t1.SNV.txt.gz
+    +-- 18-t1.SNV.txt.gz
+    +-- 19-t1.SNV.txt.gz
+    +-- 20-t1.SNV.txt.gz
+    +-- 21-t1.SNV.txt.gz
+    +-- 2-t1.SNV.txt.gz
+    +-- 22-t1.SNV.txt.gz
+    +-- 3-t1.SNV.txt.gz
+    +-- 4-t1.SNV.txt.gz
+    +-- 5-t1.SNV.txt.gz
+    +-- 6-t1.SNV.txt.gz
+    +-- 7-t1.SNV.txt.gz
+    +-- 8-t1.SNV.txt.gz
+    +-- 9-t1.SNV.txt.gz
+    +-- CNVModeling.txt
+    +-- FilterRegions.txt
+    +-- manifest.txt
+    +-- PurityModel.txt
+    +-- VFResultst1.txt.gz
+    +-- X-t1.SNV.txt.gz
+    +-- Y-t1.SNV.txt.gz
+
+3.	Prepare the output as required by the conversion script 
+The following files are required from the tool output - 
+1.	<samplename>.cleaned.gz
+2.	<samplename>.normal.binned.gz
+3.	<samplename>.partitioned.raw.gz
+The below script will copy and arrange the canvas tool output as required by the conversion script – 
+cd canvas 
+sh scripts/copy_canvas_outputs.sh output<path_to_canvas_output_folder>
+
+Output: canvas/canvas_output folder with files copied as .gz extension files.
+c.	Run the conversion script
+1.	Make sure the canvas_output from previous step is present inside the canvas folder.
+2.	Run the inmport.R script to generate the “index.tsv” file to import into the browser.
+cd cnvkit
+Rscript scripts/import.R
+3.	Import script output – 
+canvas/CNspector/
++-- index.tsv
++-- n10_targeted.tsv
++-- n10_wg_coarse.tsv
++-- n10_wg_fine.tsv
++-- n10_wg_medium.tsv
++-- n11_targeted.tsv
++-- n11_wg_coarse.tsv
++-- n11_wg_fine.tsv
++-- n11_wg_medium.tsv
++-- n12_targeted.tsv
++-- n12_wg_coarse.tsv
++-- n12_wg_fine.tsv
++-- n12_wg_medium.tsv
++-- n8_targeted.tsv
++-- n8_wg_coarse.tsv
++-- n8_wg_fine.tsv
++-- n8_wg_medium.tsv
++-- n9_targeted.tsv
++-- n9_wg_coarse.tsv
++-- n9_wg_fine.tsv
++-- n9_wg_medium.tsv
++-- t13_targeted.tsv
++-- t13_wg_coarse.tsv
++-- t13_wg_fine.tsv
++-- t13_wg_medium.tsv
++-- t15_targeted.tsv
++-- t15_wg_coarse.tsv
++-- t15_wg_fine.tsv
++-- t15_wg_medium.tsv
++-- t16_targeted.tsv
++-- t16_wg_coarse.tsv
++-- t16_wg_fine.tsv
++-- t16_wg_medium.tsv
++-- t17_targeted.tsv
++-- t17_wg_coarse.tsv
++-- t17_wg_fine.tsv
++-- t17_wg_medium.tsv
++-- t18_targeted.tsv
++-- t18_wg_coarse.tsv
++-- t18_wg_fine.tsv
++-- t18_wg_medium.tsv
++-- t19_targeted.tsv
++-- t19_wg_coarse.tsv
++-- t19_wg_fine.tsv
++-- t19_wg_medium.tsv
++-- t1_targeted.tsv
++-- t1_wg_coarse.tsv
++-- t1_wg_fine.tsv
++-- t1_wg_medium.tsv
++-- t20_targeted.tsv
++-- t20_wg_coarse.tsv
++-- t20_wg_fine.tsv
++-- t20_wg_medium.tsv
++-- t21_targeted.tsv
++-- t21_wg_coarse.tsv
++-- t21_wg_fine.tsv
++-- t21_wg_medium.tsv
++-- t22_targeted.tsv
++-- t22_wg_coarse.tsv
++-- t22_wg_fine.tsv
++-- t22_wg_medium.tsv
++-- t3_targeted.tsv
++-- t3_wg_coarse.tsv
++-- t3_wg_fine.tsv
++-- t3_wg_medium.tsv
++-- t4_targeted.tsv
++-- t4_wg_coarse.tsv
++-- t4_wg_fine.tsv
++-- t4_wg_medium.tsv
++-- t5_targeted.tsv
++-- t5_wg_coarse.tsv
++-- t5_wg_fine.tsv
++-- t5_wg_medium.tsv
++-- t6_targeted.tsv
++-- t6_wg_coarse.tsv
++-- t6_wg_fine.tsv
++-- t6_wg_medium.tsv
++-- t7_targeted.tsv
++-- t7_wg_coarse.tsv
++-- t7_wg_fine.tsv
++-- t7_wg_medium.tsv
+
+The “index.tsv” is the final file to be loaded into the browser, which contains the per sample files in each row and corresponding information. Similar file generated for other tools as well. 
+Example -
+path    file    sample  resolution      is_targeted     is_wgs
+wg_transcripts.bed      reference       wg_annotation_file      wg      FALSE   TRUE
+cytoBand.txt    reference       cytobands_file  wg      FALSE   TRUE
+chromInfo.txt   reference       chrom_info_file wg      FALSE   TRUE
+targeted_transcripts.bed        reference       targeted_annotation_file        targeted        TRUE    FALSE
+n10_wg_coarse.tsv       counts  n10     wg_coarse       FALSE   TRUE
+n10_wg_medium.tsv       counts  n10     wg_medium       FALSE   TRUE
+n10_wg_fine.tsv counts  n10     wg_fine FALSE   TRUE
+n10_targeted.tsv        counts  n10     targeted        TRUE    FALSE
+n11_wg_coarse.tsv       counts  n11     wg_coarse       FALSE   TRUE 
+
+II.	CNVKit (https://github.com/etal/cnvkit) 
+
+Documentation - https://cnvkit.readthedocs.io/en/stable/ 
+
+a.	Tool version used – v0.9.3
+
+b.	Required supporting files
+
+1.	Reference fasta file
+2.	Panel probe design bed file
+
+c.	Run cnvkit tool
+1.	Generate accessible region by access cmd
+cnvkit.py access -o reference/g1k_v37_accessible.bed human_g1k_v37.fa
+
+2.	Generate target and antitarget bed file
+cnvkit.py target Probes.bed --split -o cnvkit_target.bed
+
+3.	Generate anti-target bed file
+cnvkit.py antitarget cnvkit_target.bed --access reference/g1k_v37_accessible.bed -o cnvkit_antitargets.bed
+
+4.	Run cnvkit “batch” command as mentioned in the tool documentation or can use the following script -
+
+Location: cnvkit/cnvkit.sh
+Usage: ./cnvkit.sh -h
+cnvkit.sh [-h] [-c] [-r] [-o] [-m] [-b] [-n] [-t] [-a] [-g] [-p] -- This script calls the cnvkit batch command for germline/tumour hyb capture analysis.
+        where:
+                -h show the help
+                -c cnvkit path                          [REQUIRED. Path to the cnvkit tool folder]
+                -r reference                            [REQUIRED. reference genome fasta file]
+                -o output path                          [DEFAULT: CWD]
+                -m mode                                 [DEFAULT: Somatic. Somatic/Germline]
+                -b tumour list                          [REQUIRED. A list containing tumour samples bam full paths]
+                -n normals list                         [REQUIRED. A list containing normal samples bam full paths]
+                -t target bed                           [REQUIRED]
+                -a anti target bed                      [REQUIRED]
+                -g cnvkit access file                   [REQUIRED]
+                -p cpus                                 [REQUIRED]
+
+Example - ./cnvkit.sh -c /home/cnvkit/0.9.3/bin -r cnvkit_tool/reference/human_g1k_v37
+.fasta -b Tumour_samples.txt -n Normals.txt -t cnvkit_targets.bed -a cnvkit_antitargets.bed -g cnvkit_tool/reference/g1k_v37_accessible.bed -p 8
+
+5.	Run call command
+(add additional options as required)
+cnvkit.py call sample.cnr -v sample.vcf -o sample.call.cns
+
+6.	Cnvkit output example -
+./cnvkit_output
++-- t1.antitargetcoverage.cnn
++-- t1.call.cns
++-- t1.cnr
++-- t1.cns
++-- t1-diagram.pdf
++-- t1-scatter.pdf
++-- t1.targetcoverage.cnn
++-- t2.antitargetcoverage.cnn
++-- t2.call.cns
++-- t2.cnr
++-- t2.cns
++-- t2-diagram.pdf
++-- t2-scatter.pdf
++-- t2.targetcoverage.cnn
++-- n1.antitargetcoverage.cnn
++-- n1.targetcoverage.cnn
++-- n2.antitargetcoverage.cnn
++-- n2.targetcoverage.cnn
++-- cnvkit_targets.target.bed
++-- reference
+    +-- reference.cnn
+
+d.	Conversion script
+This script converts cnvkit tool output to CNSpector accepted file formats
+1.	Make sure the cnvkit_output folder is located inside the cnvkit folder.
+2.	Run the following command to convert cnvkit tool output to CNSpector accepted file formats
+cd cnvkit
+Rscript scripts/import.R 
+3.	Import.R script output example – 
+../CNspector/
++-- index.tsv
++-- t1_baf.tsv
++-- t1_seg.tsv
++-- t1_targeted.tsv
++-- t1_wg_coarse.tsv
++-- t1_wg_fine.tsv
++-- t1_wg_medium.tsv
++-- t2_baf.tsv
++-- t2_seg.tsv
++-- t2_targeted.tsv
++-- t2_wg_coarse.tsv
++-- t2_wg_fine.tsv
++-- t2_wg_medium.tsv
+
+III.	CopywriteR (https://github.com/PeeperLab/CopywriteR )
+
+a.	Tool version used – 2.10.
+
+b.	Required supporting files -  
+
+1.	Panel bed file (panel_transcripts.bed – refer to the README instructions)
+
+c.	Run copywriter tool 
+
+1.	Follow the tool documentation to run copywriter or can use the below script that allows running copywriter for various bin sizes (10kb, 50kb, 500kb and 1000kb). It will generate /copywriter_output and /reference/ folders. 
+
+cd copywriter
+Rscript scripts/make_copywriter.R  <path_to_the_input_samples_bamfile_list>
+
+2.	Copywriter output 
+*For output, only one bin size files and few samples are listed as an example.
+
+coywriter_output/
+hg19_1000kb/
++-- CNAprofiles
+    +-- BamBaiPeaksFiles
+    ¦   +-- t1_properreads.bam
+    ¦   +-- t1_properreads.bam.bai
+    ¦   +-- t2_properreads.bam
+    ¦   +-- t2_properreads.bam.bai
+    ¦   +-- CACHEDIR.TAG
+    ¦   +-- peaks1.bed
+    ¦   +-- peaks2.bed
+    +-- CopywriteR.log
+    +-- log2_read_counts.igv
+    +-- qc
+    ¦   +-- CACHEDIR.TAG
+    ¦   +-- fraction.of.bin.t1.bam.pdf
+    ¦   +-- fraction.of.bin.t2.bam.pdf
+    ¦   +-- read.counts.compensated.t1.bam.png
+    ¦   +-- read.counts.compensated.t2.bam.png
+    +-- read_counts.txt
+
+reference/
++-- hg19_1000kb
+¦   +-- blacklist.rda
+¦   +-- GC_mappability.rda
++-- hg19_10kb
+¦   +-- blacklist.rda
+¦   +-- GC_mappability.rda
++-- hg19_1kb
+¦   +-- blacklist.rda
+¦   +-- GC_mappability.rda
++-- hg19_20kb
+¦   +-- blacklist.rda
+¦   +-- GC_mappability.rda
++-- hg19_2kb
+¦   +-- blacklist.rda
+¦   +-- GC_mappability.rda
++-- hg19_500kb
+¦   +-- blacklist.rda
+¦   +-- GC_mappability.rda
++-- hg19_50kb
+¦   +-- blacklist.rda
+¦   +-- GC_mappability.rda
++-- hg19_5kb
+    +-- blacklist.rda
+    +-- GC_mappability.rda
+
+d.	Run the conversion script to generate CNSpector required input
+../CNspector
++-- index.tsv
++-- n10_hg19_1000kb.tsv
++-- n10_hg19_10kb.tsv
++-- n10_hg19_500kb.tsv
++-- n10_hg19_50kb.tsv
++-- n11_hg19_1000kb.tsv
++-- n11_hg19_10kb.tsv
++-- n11_hg19_500kb.tsv
++-- n11_hg19_50kb.tsv
++-- n12_hg19_1000kb.tsv
++-- n12_hg19_10kb.tsv
++-- n12_hg19_500kb.tsv
++-- n12_hg19_50kb.tsv
++-- n13_hg19_1000kb.tsv
++-- n13_hg19_10kb.tsv
++-- n13_hg19_500kb.tsv
++-- n13_hg19_50kb.tsv
++-- n8_hg19_1000kb.tsv
++-- n8_hg19_10kb.tsv
++-- n8_hg19_500kb.tsv
++-- n8_hg19_50kb.tsv
++-- n9_hg19_1000kb.tsv
++-- n9_hg19_10kb.tsv
++-- n9_hg19_500kb.tsv
++-- n9_hg19_50kb.tsv
++-- t14_hg19_1000kb.tsv
++-- t14_hg19_10kb.tsv
++-- t14_hg19_500kb.tsv
++-- t14_hg19_50kb.tsv
++-- t15_hg19_1000kb.tsv
++-- t15_hg19_10kb.tsv
++-- t15_hg19_500kb.tsv
++-- t15_hg19_50kb.tsv
++-- t16_hg19_1000kb.tsv
++-- t16_hg19_10kb.tsv
++-- t16_hg19_500kb.tsv
++-- t16_hg19_50kb.tsv
++-- t17_hg19_1000kb.tsv
++-- t17_hg19_10kb.tsv
++-- t17_hg19_500kb.tsv
++-- t17_hg19_50kb.tsv
++-- t18_hg19_1000kb.tsv
++-- t18_hg19_10kb.tsv
++-- t18_hg19_500kb.tsv
++-- t18_hg19_50kb.tsv
++-- t19_hg19_1000kb.tsv
++-- t19_hg19_10kb.tsv
++-- t19_hg19_500kb.tsv
++-- t19_hg19_50kb.tsv
++-- t1_hg19_1000kb.tsv
++-- t1_hg19_10kb.tsv
++-- t1_hg19_500kb.tsv
++-- t1_hg19_50kb.tsv
++-- t20_hg19_1000kb.tsv
++-- t20_hg19_10kb.tsv
++-- t20_hg19_500kb.tsv
++-- t20_hg19_50kb.tsv
++-- t21_hg19_1000kb.tsv
++-- t21_hg19_10kb.tsv
++-- t21_hg19_500kb.tsv
++-- t21_hg19_50kb.tsv
++-- t22_hg19_1000kb.tsv
++-- t22_hg19_10kb.tsv
++-- t22_hg19_500kb.tsv
++-- t22_hg19_50kb.tsv
++-- t2_hg19_1000kb.tsv
++-- t2_hg19_10kb.tsv
++-- t2_hg19_500kb.tsv
++-- t2_hg19_50kb.tsv
++-- t3_hg19_1000kb.tsv
++-- t3_hg19_10kb.tsv
++-- t3_hg19_500kb.tsv
++-- t3_hg19_50kb.tsv
++-- t4_hg19_1000kb.tsv
++-- t4_hg19_10kb.tsv
++-- t4_hg19_500kb.tsv
++-- t4_hg19_50kb.tsv
++-- t5_hg19_1000kb.tsv
++-- t5_hg19_10kb.tsv
++-- t5_hg19_500kb.tsv
++-- t5_hg19_50kb.tsv
++-- t6_hg19_1000kb.tsv
++-- t6_hg19_10kb.tsv
++-- t6_hg19_500kb.tsv
++-- t6_hg19_50kb.tsv
++-- t7_hg19_1000kb.tsv
++-- t7_hg19_10kb.tsv
++-- t7_hg19_500kb.tsv
++-- t7_hg19_50kb.tsv
