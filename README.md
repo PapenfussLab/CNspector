@@ -1,4 +1,4 @@
-# CNSpector
+# CNspector
                                                            
 CNSpector is a web-based browser to visualize Copy Number Variation (CNV) calls. The browser is an R program for shiny-server that reads an input file containing a table whose rows point to the files to display for a given sample or group of samples (multi-sample mode). Currently it can support output from cnvkit, copywriter and canvas tools. The outputs from these tools are converted in a format accepted by CNSpector.
 
