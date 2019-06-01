@@ -115,9 +115,9 @@ Supported options in the URL link -
 
 Example to load the “index.tsv” file into the browser (specific tool / combination index )
 
-		http://shiny.server.url/?file=prefix_path/ CNspector/canvas/CNSpector/index.tsv&reference_path=prefix_path/CNSpector/annotations/browser&base_path=/home/canvas/CNSpector
+		http://shiny.server.url/?file=prefix_path/CNspector/canvas/CNSpector/index.tsv&reference_path=prefix_path/CNSpector/annotations/browser&base_path=/home/canvas/CNSpector
 
 Debug mode – 
 	
-		http://shiny.server.url/?file=prefix_path/ CNspector/canvas/CNSpector/index.tsv&reference_path=prefix_path/CNSpector/annotations/browser&base_path=/home/canvas/CNSpector&debug=T
+		http://shiny.server.url/?file=prefix_path/CNspector/canvas/CNSpector/index.tsv&reference_path=prefix_path/CNSpector/annotations/browser&base_path=/home/canvas/CNSpector&debug=T
 
